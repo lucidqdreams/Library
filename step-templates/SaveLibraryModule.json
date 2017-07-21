@@ -1,0 +1,37 @@
+{
+  "Id": "107096a4-a58d-4724-9ffa-3ddeb6edd1bd",
+  "Name": "Save Library Script Module",
+  "Description": "Saves script module from library to local powershell module directory",
+  "ActionType": "Octopus.Script",
+  "Version": 2,
+  "CommunityActionTemplateId": null,
+  "Properties": {
+    "Octopus.Action.Script.Syntax": "PowerShell",
+    "Octopus.Action.Script.ScriptSource": "Inline",
+    "Octopus.Action.RunOnServer": "false",
+    "Octopus.Action.Script.ScriptBody": "$SaveModuleName = $ModuleName.Replace(' ','')\n\n$ModulePath = \"C:\\Program Files\\WindowsPowerShell\\Modules\\$SaveModuleName\\\"\nif (test-path $ModulePath) {\n    write-verbose \"$ModulePath path found\"\n} else {\n    mkdir $ModulePath \n}\n\n$ScriptModule = @\"\n#{Octopus.Script.Module[$ModuleName]}\n\"@\n\n\n$ModuleFile = join-path $ModulePath \"$SaveModuleName.psm1\"\nset-content -path $ModuleFile -value $ScriptModule -force\n$PSDModuleFile = join-path $ModulePath \"$SaveModuleName.psd1\"\nNew-ModuleManifest -RootModule $moduleFile -Path $PSDModuleFile \n\n\n\n",
+    "Octopus.Action.Script.ScriptFileName": null,
+    "Octopus.Action.Package.FeedId": null,
+    "Octopus.Action.Package.PackageId": null
+  },
+  "Parameters": [
+    {
+      "Id": "cc771b5b-e76f-47bb-9983-0d98e8e122f4",
+      "Name": "ModuleName",
+      "Type": "String",
+      "Label": "Library Module Name",
+      "HelpText": "Library Module Name",
+      "DefaultValue": "",
+      "DisplaySettings": {
+        "Octopus.ControlType": "SingleLineText"
+      },
+      "Links": {}
+    }
+  ],
+  "$Meta": {
+    "ExportedAt": "2017-07-21T18:17:03.847Z",
+    "OctopusVersion": "3.11.15",
+    "Type": "ActionTemplate"
+  }
+  "Category": "PowerShell"
+}
